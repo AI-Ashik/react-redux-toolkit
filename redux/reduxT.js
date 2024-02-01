@@ -1,7 +1,7 @@
 // Importing necessary modules
-const axios = require("axios");
-const { applyMiddleware, createStore } = require("redux");
-const thunk = require("redux-thunk").default;
+import axios from "axios";
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
 
 // Constants for action types and API URL
 const GET_REQUEST = "GET_REQUEST";
