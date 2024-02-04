@@ -1,6 +1,5 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const res = await axios("https://jsonplaceholder.typicode.com/todos");
@@ -14,5 +13,21 @@ const postSlice = createSlice({
     post: [],
     error: null,
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchPosts.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchPosts.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.post = action.payload;
+      state.error = null;
+    });
+    builder.addCase(fetchPosts.rejected, (state, action) => {
+      state.isLoading = false;
+      state.post = [];
+      state.error = action.error.message;
+    });
+  },
 });
+
+export default postSlice.reducer;
