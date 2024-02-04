@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   try {
     // Fetch data from the API
-    const response = await axios("https://jsonplaceholder.typicode.com/todos");
+    const response = await axios("https://jsonplaceholder.typicode.com/posts");
     return response.data; // Return the data fetched from the API
   } catch (error) {
     // Handle errors if any
