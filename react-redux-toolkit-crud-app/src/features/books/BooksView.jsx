@@ -6,6 +6,7 @@ const BooksView = () => {
 
   return (
     <div>
+      <h2>Books List</h2>
       <table className={styles.table}>
         <thead>
           <tr>
