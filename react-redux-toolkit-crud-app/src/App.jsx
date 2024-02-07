@@ -1,10 +1,12 @@
-import "./App.css";
+import NavBar from "./layouts/NavBar";
+import Index from "./routes";
 
 function App() {
   return (
     <>
-      <h2 id="root">
-        <h2>Hello World</h2>
+      <h2>
+        <NavBar />
+        <Index />
       </h2>
     </>
   );
