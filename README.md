@@ -980,15 +980,3 @@ export const GET_TODOS_FAILED = "GET_TODOS_FAILED";
 
   export default CounterView;
   ```
-
-## 11. API calling using redux-toolkit in react
-
-## 12. CRUD APP using redux-toolkit in react
-
-- project code in github: https://github.com/anisul-Islam/redux-toolkit-crud-app
-
-```
-
-```
-
-# 13.[A complete CRUD APP using RTK Query]
