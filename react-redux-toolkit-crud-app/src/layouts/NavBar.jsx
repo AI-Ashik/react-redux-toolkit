@@ -1,23 +1,26 @@
-import "tailwindcss/tailwind.css";
+import styles from "./navbar.module.css"; // Import module-level CSS
+
 const NavBar = () => {
   return (
-    <div>
-      <nav>
-        <ul>
-          <li className="bg-red-600">
-            <a href="/">Home</a>
-          </li>
-
-          <li>
-            <a href="/add-book">Add Book</a>
-          </li>
-
-          <li>
-            <a href="/books-view">Show Books</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <nav className={styles.nav}>
+      <ul className={styles.navList}>
+        <li className={styles.navItem}>
+          <a href="/" className={styles.navLink}>
+            Home
+          </a>
+        </li>
+        <li className={styles.navItem}>
+          <a href="/add-book" className={styles.navLink}>
+            Add Book
+          </a>
+        </li>
+        <li className={styles.navItem}>
+          <a href="/show-books" className={styles.navLink}>
+            Show Books
+          </a>
+        </li>
+      </ul>
+    </nav>
   );
 };
 
