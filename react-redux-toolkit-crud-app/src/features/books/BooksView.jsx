@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { deleteBook } from "./bookSlice";
 import styles from "./booksView.module.css"; // Import module-level CSS
 
@@ -32,9 +33,11 @@ const BooksView = () => {
                   <td>{title}</td>
                   <td>{author}</td>
                   <td>
-                    <button className={`${styles.button} ${styles.edit}`}>
-                      Edit
-                    </button>
+                    <Link to="/edit-book">
+                      <button className={`${styles.button} ${styles.edit}`}>
+                        Edit
+                      </button>
+                    </Link>
                     <button
                       className={`${styles.button} ${styles.delete}`}
                       onClick={() => {
