@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import styles from "./addBook.module.css";
 import { addBook } from "./bookSlice";
 
 const AddBook = () => {
@@ -20,12 +21,15 @@ const AddBook = () => {
   };
 
   return (
-    <div>
+    <div className={styles.addBookContainer}>
       <h2 style={{ textAlign: "center" }}>Add Books</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-field">
-          <label htmlFor="title">Title : </label>
+        <div className={styles.formField}>
+          <label htmlFor="title" className={styles.label}>
+            Title :{" "}
+          </label>
           <input
+            className={styles.inputText}
             type="text"
             name="title"
             id="title"
@@ -34,9 +38,12 @@ const AddBook = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <div className="form-field">
-          <label htmlFor="author">Author : </label>
+        <div className={styles.formField}>
+          <label htmlFor="author" className={styles.label}>
+            Author :{" "}
+          </label>
           <input
+            className={styles.inputText}
             type="text"
             name="author"
             id="author"
@@ -45,7 +52,9 @@ const AddBook = () => {
             onChange={(e) => setAuthor(e.target.value)}
           />
         </div>
-        <button type="submit">Add book</button>
+        <button className={styles.submitButton} type="submit">
+          Add book
+        </button>
       </form>
     </div>
   );
