@@ -5,8 +5,7 @@ import { deleteTodo, toggleComplete } from "../src/app/todoSlice";
 const TodoItem = ({ id, title, completed }) => {
   const dispatch = useDispatch();
 
-  const handleCompleteChange = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
+  const handleCompleteChange = () => {
     dispatch(
       toggleComplete({
         id: id,
@@ -31,6 +30,7 @@ const TodoItem = ({ id, title, completed }) => {
             type="checkbox"
             className="mr-3"
             onChange={handleCompleteChange}
+            checked={completed}
           />
           {title}
         </span>
