@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { toggleComplete } from "../src/app/todoSlice";
+import { deleteTodo, toggleComplete } from "../src/app/todoSlice";
 
 // eslint-disable-next-line react/prop-types
 const TodoItem = ({ id, title, completed }) => {
@@ -15,6 +15,14 @@ const TodoItem = ({ id, title, completed }) => {
     );
   };
 
+  const handleDeleteTodo = () => {
+    dispatch(
+      deleteTodo({
+        id: id,
+      })
+    );
+  };
+
   return (
     <li className={`list-group-item ${completed && "list-group-item-success"}`}>
       <div className="d-flex justify-content-between">
@@ -26,7 +34,9 @@ const TodoItem = ({ id, title, completed }) => {
           />
           {title}
         </span>
-        <button className="btn btn-danger">Delete</button>
+        <button className="btn btn-danger" onClick={handleDeleteTodo}>
+          Delete
+        </button>
       </div>
     </li>
   );
