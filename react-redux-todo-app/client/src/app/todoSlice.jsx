@@ -1,22 +1,38 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+import { v4 as uuidv4 } from "uuid";
+// Async thunks
 export const getTodosAsync = createAsyncThunk(
-  "todosd/getTodosAsync",
+  "todos/getTodosAsync",
   async () => {
-    try {
-      const response = await fetch("http://localhost:3000/todos");
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const data = await response.json();
-      return { data };
-    } catch (error) {
-      // Handle errors
-      return error.message;
+    const response = await fetch("http://localhost:3000/todos");
+    if (response.ok) {
+      const todos = await response.json(); // Ensure await to get the JSON data
+      return todos; // Return the todos directly
     }
   }
 );
 
+export const addTodosAsync = createAsyncThunk(
+  "todos/addTodosAsync",
+  async (payload) => {
+    const response = await fetch("http://localhost:3000/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: payload.title,
+      }),
+    });
+
+    if (response.ok) {
+      const todo = await response.json(); // Ensure await to get the JSON data
+      return todo; // Return the todo directly
+    }
+  }
+);
+
+// Reducers
 const todoSlice = createSlice({
   name: "todos",
   initialState: [
@@ -27,7 +43,7 @@ const todoSlice = createSlice({
   reducers: {
     addTodo: (state, action) => {
       const newTodo = {
-        id: Date.now(),
+        id: uuidv4(),
         title: action.payload.title,
         completed: false,
       };
@@ -41,21 +57,15 @@ const todoSlice = createSlice({
     deleteTodo: (state, action) => {
       return state.filter((todo) => todo.id !== action.payload.id);
     },
-    extraReducers: (builder) => {
-      builder
-        // eslint-disable-next-line no-unused-vars
-        .addCase(getTodosAsync.pending, (state) => {
-          console.log("Fetching data");
-        })
-        .addCase(getTodosAsync.fulfilled, (state, action) => {
-          console.log("Fetched data");
-          return action.payload.todos;
-        })
-        .addCase(getTodosAsync.rejected, (state, action) => {
-          state.isLoading = false;
-          state.error = action.payload;
-        });
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getTodosAsync.fulfilled, (state, action) => {
+        state.push(...action.payload);
+      })
+      .addCase(addTodosAsync.fulfilled, (state, action) => {
+        state.push(action.payload);
+      });
   },
 });
 
