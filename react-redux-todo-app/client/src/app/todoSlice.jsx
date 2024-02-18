@@ -1,55 +1,78 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
-// Async thunks
+import { nanoid } from "nanoid";
+
 export const getTodosAsync = createAsyncThunk(
   "todos/getTodosAsync",
   async () => {
-    const response = await fetch("http://localhost:3000/todos");
-    if (response.ok) {
-      const todos = await response.json(); // Ensure await to get the JSON data
-      return todos; // Return the todos directly
+    const resp = await fetch("http://localhost:3000/todos");
+    if (resp.ok) {
+      const todos = await resp.json();
+      return { todos };
     }
   }
 );
 
-export const addTodosAsync = createAsyncThunk(
-  "todos/addTodosAsync",
+export const addTodoAsync = createAsyncThunk(
+  "todos/addTodoAsync",
   async (payload) => {
-    const response = await fetch("http://localhost:3000/todos", {
+    const resp = await fetch("http://localhost:3000/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        title: payload.title,
-      }),
+      body: JSON.stringify({ title: payload.title }),
     });
 
-    if (response.ok) {
-      const todo = await response.json(); // Ensure await to get the JSON data
-      return todo; // Return the todo directly
+    if (resp.ok) {
+      const todo = await resp.json();
+      return { todo };
     }
   }
 );
 
-// Reducers
+export const toggleCompleteAsync = createAsyncThunk(
+  "todos/completeTodoAsync",
+  async (payload) => {
+    const resp = await fetch(`http://localhost:3000/todos/${payload.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ completed: payload.completed }),
+    });
+
+    if (resp.ok) {
+      const todo = await resp.json();
+      return { todo };
+    }
+  }
+);
+
+export const deleteTodoAsync = createAsyncThunk(
+  "todos/deleteTodoAsync",
+  async (payload) => {
+    const resp = await fetch(`http://localhost:3000/todos/${payload.id}`, {
+      method: "DELETE",
+    });
+
+    if (resp.ok) {
+      return { id: payload.id };
+    }
+  }
+);
+
 const todoSlice = createSlice({
   name: "todos",
-  initialState: [
-    { id: 1, title: "lorem 1", completed: false },
-    { id: 2, title: "lorem 2", completed: false },
-    { id: 3, title: "lorem 3", completed: true },
-  ],
+  initialState: [],
   reducers: {
     addTodo: (state, action) => {
-      const newTodo = {
-        id: uuidv4(),
+      const todo = {
+        id: nanoid(),
         title: action.payload.title,
         completed: false,
       };
-      state.push(newTodo);
+      state.push(todo);
     },
-
     toggleComplete: (state, action) => {
       const index = state.findIndex((todo) => todo.id === action.payload.id);
       state[index].completed = action.payload.completed;
@@ -61,10 +84,19 @@ const todoSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getTodosAsync.fulfilled, (state, action) => {
-        state.push(...action.payload);
+        return action.payload.todos;
       })
-      .addCase(addTodosAsync.fulfilled, (state, action) => {
-        state.push(action.payload);
+      .addCase(addTodoAsync.fulfilled, (state, action) => {
+        state.push(action.payload.todo);
+      })
+      .addCase(toggleCompleteAsync.fulfilled, (state, action) => {
+        const index = state.findIndex(
+          (todo) => todo.id === action.payload.todo.id
+        );
+        state[index].completed = action.payload.todo.completed;
+      })
+      .addCase(deleteTodoAsync.fulfilled, (state, action) => {
+        return state.filter((todo) => todo.id !== action.payload.id);
       });
   },
 });

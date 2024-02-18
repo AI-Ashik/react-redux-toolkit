@@ -1,25 +1,16 @@
 import { useDispatch } from "react-redux";
-import { deleteTodo, toggleComplete } from "../src/app/todoSlice";
+import { deleteTodoAsync, toggleCompleteAsync } from "../src/app/todoSlice";
 
 // eslint-disable-next-line react/prop-types
 const TodoItem = ({ id, title, completed }) => {
   const dispatch = useDispatch();
 
-  const handleCompleteChange = () => {
-    dispatch(
-      toggleComplete({
-        id: id,
-        completed: !completed,
-      })
-    );
+  const handleCheckboxChange = () => {
+    dispatch(toggleCompleteAsync({ id, completed: !completed }));
   };
 
-  const handleDeleteTodo = () => {
-    dispatch(
-      deleteTodo({
-        id: id,
-      })
-    );
+  const handleDeleteClick = () => {
+    dispatch(deleteTodoAsync({ id }));
   };
 
   return (
@@ -29,12 +20,12 @@ const TodoItem = ({ id, title, completed }) => {
           <input
             type="checkbox"
             className="mr-3"
-            onChange={handleCompleteChange}
             checked={completed}
-          />
+            onChange={handleCheckboxChange}
+          ></input>
           {title}
         </span>
-        <button className="btn btn-danger" onClick={handleDeleteTodo}>
+        <button onClick={handleDeleteClick} className="btn btn-danger">
           Delete
         </button>
       </div>

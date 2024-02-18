@@ -5,7 +5,6 @@ import TodoItem from "./TodoItem";
 
 const TodoList = () => {
   const dispatch = useDispatch();
-
   const todos = useSelector((state) => state.todos);
 
   useEffect(() => {
